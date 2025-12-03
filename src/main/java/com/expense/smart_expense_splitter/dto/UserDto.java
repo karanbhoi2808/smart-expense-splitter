@@ -2,14 +2,12 @@ package com.expense.smart_expense_splitter.dto;
 
 import com.expense.smart_expense_splitter.dto.base.BaseDto;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.EqualsAndHashCode;
-import org.hibernate.validator.constraints.UniqueElements;
 
 @Data
 @AllArgsConstructor

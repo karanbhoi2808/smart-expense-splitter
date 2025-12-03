@@ -1,7 +1,6 @@
 package com.expense.smart_expense_splitter.controller;
 
 import com.expense.smart_expense_splitter.dto.UserDto;
-import com.expense.smart_expense_splitter.model.User;
 import com.expense.smart_expense_splitter.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,6 @@
 package com.expense.smart_expense_splitter.service;
 
 import com.expense.smart_expense_splitter.dto.UserDto;
-import com.expense.smart_expense_splitter.model.User;
 
 import java.util.List;
 import java.util.UUID;
