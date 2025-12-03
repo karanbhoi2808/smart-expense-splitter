@@ -10,7 +10,7 @@ public class SmartExpenseSplitterApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SmartExpenseSplitterApplication.class, args);
-        System.out.println("SmartExpenseSplitterApplication started...");
+        System.out.println("SmartExpenseSplitterApplication started..");
 	}
 
 }
