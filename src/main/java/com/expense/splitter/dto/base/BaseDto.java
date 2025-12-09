@@ -14,5 +14,5 @@ public class BaseDto {
     private UUID id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private boolean isActive;
+    private boolean isActive = true;
 }
