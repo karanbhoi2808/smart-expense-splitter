@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
         methodArgumentNotValidException.getBindingResult().getAllErrors().forEach((error) -> {
             errors.put(((FieldError) error).getField(), error.getDefaultMessage());
         });
-        return new ResponseEntity<Map<String, String>>(errors, HttpStatus.CONFLICT);
+        return new ResponseEntity<Map<String, String>>(errors, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
