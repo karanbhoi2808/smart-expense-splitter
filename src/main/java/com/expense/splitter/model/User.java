@@ -1,6 +1,6 @@
 package com.expense.splitter.model;
 
-import com.expense.splitter.model.base.BaseModel;
+import com.expense.splitter.model.base.AuditModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Email;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class User extends BaseModel {
+public class User extends AuditModel {
 
     @Column(nullable = false, length = 50)
     private String name;
