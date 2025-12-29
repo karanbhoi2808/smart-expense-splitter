@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -62,5 +63,17 @@ public class UserServiceImpl implements UserService {
         User user = this.userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorCode.USER_NOT_FOUND));
         user.setActive(status);
         this.userRepository.save(user);
+    }
+
+    @Override
+    public List<User> getUsersByIds(Set<UUID> ids) {
+        return this.userRepository.findAllById(ids);
+    }
+
+    @Override
+    public List<UserDto> toDtos(List<User> users) {
+        return users.stream()
+                .map(userMapper::toDto)
+                .toList();
     }
 }
