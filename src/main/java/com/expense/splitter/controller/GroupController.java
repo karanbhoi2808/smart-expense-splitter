@@ -2,6 +2,7 @@ package com.expense.splitter.controller;
 
 import com.expense.splitter.dto.GroupDto;
 import com.expense.splitter.dto.StatusRequest;
+import com.expense.splitter.dto.UserDto;
 import com.expense.splitter.service.GroupService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -52,5 +54,17 @@ public class GroupController {
     public ResponseEntity<Void> activeDeActiveGroup(@PathVariable UUID groupId, @Valid @RequestBody StatusRequest statusRequest) {
         this.groupService.activeDeActiveGroup(groupId, statusRequest.getStatus());
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{groupId}/users")
+    public ResponseEntity<Void> addUsersToGroup(@PathVariable UUID groupId, @RequestBody Set<UUID> userIds) {
+        this.groupService.addUsersToGroup(groupId, userIds);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{groupId}/users")
+    public ResponseEntity<List<UserDto>> getGroupWiseUsers(@PathVariable UUID groupId) {
+        List<UserDto> groupWiseUsers = this.groupService.getGroupWiseUsers(groupId);
+        return new ResponseEntity<>(groupWiseUsers, HttpStatus.OK);
     }
 }

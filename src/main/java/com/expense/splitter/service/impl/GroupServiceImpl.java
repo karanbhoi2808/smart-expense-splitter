@@ -1,25 +1,35 @@
 package com.expense.splitter.service.impl;
 
 import com.expense.splitter.dto.GroupDto;
+import com.expense.splitter.dto.UserDto;
 import com.expense.splitter.exception.ErrorCode;
 import com.expense.splitter.exception.ResourceNotFoundException;
 import com.expense.splitter.mapper.GroupMapper;
 import com.expense.splitter.model.Group;
+import com.expense.splitter.model.GroupUser;
+import com.expense.splitter.model.User;
 import com.expense.splitter.repository.GroupRepository;
+import com.expense.splitter.repository.GroupUsersRepository;
 import com.expense.splitter.service.GroupService;
+import com.expense.splitter.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
 public class GroupServiceImpl implements GroupService {
     private final GroupMapper groupMapper;
     private final GroupRepository groupRepository;
+    private final GroupUsersRepository groupUsersRepository;
+    private final UserService userService;
 
-    GroupServiceImpl(GroupRepository groupRepository, GroupMapper groupMapper) {
+    GroupServiceImpl(GroupRepository groupRepository, GroupMapper groupMapper, GroupUsersRepository groupUsersRepository, UserService userService) {
         this.groupRepository = groupRepository;
         this.groupMapper = groupMapper;
+        this.groupUsersRepository = groupUsersRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -62,10 +72,45 @@ public class GroupServiceImpl implements GroupService {
         this.groupRepository.save(group);
     }
 
+
+    @Override
+    public void addUsersToGroup(UUID groupId, Set<UUID> userIds) {
+        Group group = getGroupOrThrow(groupId);
+        List<User> users = this.userService.getUsersByIds(userIds);
+        List<User> remainingUser = users.stream()
+                .filter(user ->
+                        !this.groupUsersRepository.existsByGroupIdAndUserId(groupId, user.getId())
+                )
+                .toList();
+
+        if (remainingUser.isEmpty()) return;
+
+        List<GroupUser> groupUsers = remainingUser.stream().map(user -> {
+            GroupUser groupUser = new GroupUser();
+            groupUser.setGroup(group);
+            groupUser.setUser(user);
+            return groupUser;
+        }).toList();
+
+        this.groupUsersRepository.saveAll(groupUsers);
+    }
+
+    @Override
+    public List<UserDto> getGroupWiseUsers(UUID groupId) {
+
+        List<User> users = groupUsersRepository.findByGroupId(groupId)
+                .stream()
+                .map(GroupUser::getUser)
+                .toList();
+        return this.userService.toDtos(users);
+    }
+
+
     private Group getGroupOrThrow(UUID id) {
         return groupRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(ErrorCode.GROUP_NOT_FOUND)
                 );
     }
+
 }
